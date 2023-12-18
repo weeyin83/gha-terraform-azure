@@ -29,7 +29,12 @@ resource "azurerm_resource_group" "techielassrg" {
 resource "azurerm_network_ddos_protection_plan" "techielassddos" {
   name                = local.ddos_plan_name
   resource_group_name = azurerm_resource_group.techielassrg.name
-  location = azurerm_resource_group.techielassrg.location
+  location = azurerm_resource_group.techielassrg.location  
+tags = {
+    environment = var.tag_environment
+    owner = var.tag_owner
+  }
+
 }
 
 
