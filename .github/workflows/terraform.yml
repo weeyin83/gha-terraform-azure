@@ -12,7 +12,7 @@ jobs:
   environment: production
   defaults: 
     run: 
-      shell:bash
+      shell: bash
       working-directory: ./main
   env:
     ARM_CLIENT_ID:
