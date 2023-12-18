@@ -20,8 +20,8 @@ resource "azurerm_resource_group" "techielassrg" {
   name     = local.resource_group_name
   location = var.location
   tags = {
-    environment = "dev"
-    owner = "sarah"
+    environment = var.tag_environment
+    owner = var.tag_owner
   }
 }
 
@@ -45,8 +45,8 @@ resource "azurerm_virtual_network" "techielassvnet" {
     enable = true
   }
   tags = {
-    environment = "dev"
-    owner = "sarah"
+    environment = var.tag_environment
+    owner = var.tag_owner
   }
 }
  
