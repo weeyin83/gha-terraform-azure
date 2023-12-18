@@ -36,7 +36,7 @@ resource "random_string" "ddos_protection_plan" {
 resource "azurerm_network_ddos_protection_plan" "techielassddos" {
   name                = random_string.ddos_protection_plan.result
   resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+  location = azurerm_resource_group.techielassrg.location
 }
 
 
