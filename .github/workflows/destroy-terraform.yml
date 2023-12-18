@@ -40,5 +40,5 @@ jobs:
 # Run a terraform plan 
     - name: Terraform Plan
       id: plan
-      run: terraform destroy -auto-approve
+      run: terraform destroy -lock=false -auto-approve
 
