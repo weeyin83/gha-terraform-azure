@@ -1,50 +1,43 @@
-terraform {
+## 
+# Local variables
+##
 
-  backend "azurerm" {
-    key                  = "github.terraform.tfstate"
-  }
-
-  required_version = ">=0.12"
-
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~>2.0"
-    }
-  }
+locals {
+  resource_group_name = "${var.naming_prefix}-${random_integer.name_suffix.result}"
+  ddos_plan_name = "${var.naming_prefix}-${random_integer.name_suffix.result}"
+  vnet_name = "${var.naming_prefix}-${random_integer.name_suffix.result}"
+  subnet_name = "${var.naming_prefix}-${random_integer.name_suffix.result}"
 }
 
-provider "azurerm" {
-  features {}
+resource "random_integer" "name_suffix" {
+  min = 10000
+  max = 99999
 }
+
 
 # Create Resource Group
 resource "azurerm_resource_group" "techielassrg" {
-  name     = "github-terraform-resource-group"
-  location = "uksouth"
+  name     = local.resource_group_name
+  location = var.location
   tags = {
     environment = "dev"
     owner = "sarah"
   }
 }
-resource "random_string" "ddos_protection_plan" {
-  length  = 13
-  upper   = false
-  numeric = false
-  special = false
-}
+
+# Create DDOS Protection Plan
 resource "azurerm_network_ddos_protection_plan" "techielassddos" {
-  name                = random_string.ddos_protection_plan.result
+  name                = local.ddos_plan_name
   resource_group_name = azurerm_resource_group.techielassrg.name
   location = azurerm_resource_group.techielassrg.location
 }
 
 
-# Create Virtual Network
+# Create Virtual Network and enabled DDOS protection
 resource "azurerm_virtual_network" "techielassvnet" {
-  name                = "techielass-gha-vnet"
+  name                = local.vnet_name
   address_space       = ["10.0.0.0/16"]
-  location            = "uksouth"
+  location            = azurerm_resource_group.techielassrg.location
   resource_group_name = azurerm_resource_group.techielassrg.name
 
   ddos_protection_plan {
@@ -57,9 +50,9 @@ resource "azurerm_virtual_network" "techielassvnet" {
   }
 }
  
-# Create Subnet
+# Create Subnet within virtual network
 resource "azurerm_subnet" "techielasssubnet" {
-  name                 = "subnet"
+  name                 = local.subnet_name
   resource_group_name  = azurerm_resource_group.techielassrg.name
   virtual_network_name = azurerm_virtual_network.techielassvnet.name
   address_prefixes     = ["10.0.0.0/24"]
