@@ -19,7 +19,7 @@ terraform {
 }
 
 ##
-# Terraform Configuration
+# Providers
 ##
 
 provider "azurerm" {
