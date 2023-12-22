@@ -22,7 +22,7 @@ jobs:
 
 
     steps:
-  # Checkout the preository to the GitHub Actions runner
+  # Checkout the respository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v4.1.1
 
