@@ -4,9 +4,9 @@
 
 locals {
   resource_group_name = "${var.naming_prefix}-${random_integer.name_suffix.result}"
-  ddos_plan_name = "${var.naming_prefix}-${random_integer.name_suffix.result}"
-  vnet_name = "${var.naming_prefix}-${random_integer.name_suffix.result}"
-  subnet_name = "${var.naming_prefix}-${random_integer.name_suffix.result}"
+  ddos_plan_name      = "${var.naming_prefix}-${random_integer.name_suffix.result}"
+  vnet_name           = "${var.naming_prefix}-${random_integer.name_suffix.result}"
+  subnet_name         = "${var.naming_prefix}-${random_integer.name_suffix.result}"
 }
 
 resource "random_integer" "name_suffix" {
@@ -21,7 +21,7 @@ resource "azurerm_resource_group" "techielassrg" {
   location = var.location
   tags = {
     environment = var.tag_environment
-    owner = var.tag_owner
+    owner       = var.tag_owner
   }
 }
 
@@ -29,10 +29,10 @@ resource "azurerm_resource_group" "techielassrg" {
 resource "azurerm_network_ddos_protection_plan" "techielassddos" {
   name                = local.ddos_plan_name
   resource_group_name = azurerm_resource_group.techielassrg.name
-  location = azurerm_resource_group.techielassrg.location  
-tags = {
+  location            = azurerm_resource_group.techielassrg.location
+  tags = {
     environment = var.tag_environment
-    owner = var.tag_owner
+    owner       = var.tag_owner
   }
 
 }
@@ -46,15 +46,15 @@ resource "azurerm_virtual_network" "techielassvnet" {
   resource_group_name = azurerm_resource_group.techielassrg.name
 
   ddos_protection_plan {
-    id = azurerm_network_ddos_protection_plan.techielassddos.id
+    id     = azurerm_network_ddos_protection_plan.techielassddos.id
     enable = true
   }
   tags = {
     environment = var.tag_environment
-    owner = var.tag_owner
+    owner       = var.tag_owner
   }
 }
- 
+
 # Create Subnet within virtual network
 resource "azurerm_subnet" "techielasssubnet" {
   name                 = local.subnet_name
